@@ -14,7 +14,7 @@ import compression from "compression";
 import cookierseeion from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
 import 'express-async-errors';
-
+const SERVER_PORT =  5000;
 export class chewataServer {
   private app: Application;
 
@@ -61,7 +61,19 @@ export class chewataServer {
   }
   private routeMiddleware(app: Application): void {}
   private globalErrorHandler(app: Application): void {}
-  private startServer(app: Application): void {}
+  private async startServer(app: Application): Promise<void> {
+    try {
+      const httpServer: http.Server =new http.Server(app);
+      // this.createSocketIo(httpServer);
+      this.startHttpServer(httpServer);
+    } catch (error) {
+      console.error("Error while starting server", error);
+    }
+  }
   private createSocketIo(httpServer: http.Server): void {}
-  private startHttpServer(httpServer: http.Server): void {}
+  private startHttpServer(httpServer: http.Server): void {
+    httpServer.listen(SERVER_PORT, () => {
+      console.log(`Server is running on port ${SERVER_PORT}`);
+    });
+  }
 }
