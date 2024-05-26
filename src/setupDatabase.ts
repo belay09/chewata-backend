@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { config } from "@root/config";
 import Logger from "bunyan";
+import { redisConnection } from "@services/redis/redis.connection";
 const log: Logger = config.createLogger("chewata-Database");
 
 export default () => {
@@ -14,7 +15,8 @@ export default () => {
         mongoose
             .connect(dbUrl)
             .then(() => {
-                return log.info(`Successfully connected to the database`);
+                log.info(`Successfully connected to the database`);
+                redisConnection.connect();
             })
             .catch((error) => {
                 log.error("Error connecting to database: ", error);
