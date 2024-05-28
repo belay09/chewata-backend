@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
+import HTTP_STATUS from 'http-status-codes';
 
-export const signOut = (req: Request, res: Response) => {
-    // Implement your sign out logic here
-    // For example, you can clear the user session or token
-    req.session = null;
-    
-
-    // Send a response indicating successful sign out
-    res.status(200).json({ message: 'Sign out successful' });
-};
+export class signOut {
+    public update(req: Request, res: Response) {
+        req.session = null;
+        res.status(HTTP_STATUS.OK).json({ message: 'Sign out successful' });
+    }
+}

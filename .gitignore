@@ -13,7 +13,7 @@
 .DS_Store
 .env
 *.log
-/src/features/user/interface/mongodb-compass_1.43.0_amd64.deb
+src/features/user/interface/mongodb-compass_1.43.0_amd64.deb
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

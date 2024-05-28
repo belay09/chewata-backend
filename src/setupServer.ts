@@ -48,7 +48,7 @@ export class chewataServer {
       cookieSeeion({
         name: "session",
         keys: [secretKey1, secretKey2],
-        maxAge: 24 * 7 * 60 * 60 * 1000,
+        maxAge: 5000,
         secure: config.NODE_ENV !== "development", //true for https
       })
     );

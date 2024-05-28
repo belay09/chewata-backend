@@ -47,13 +47,16 @@ export class SignUp{
                 throw new BadRequestError('Error uploading image');
             }
             //add user to redis cache
-            const userDataForCache:IUserDocument =SignUp.prototype.userData(authData,userObjectId);
+            const userDataForCache:IUserDocument =SignUp.prototype.userData(authData,userObjectId,authObjectId);
             userDataForCache.profilePicture =`https://res.cloudinary.com/${config.CLOUD_NAME}/image/upload/v${result.version}/${userObjectId}`;
             await userCache.saveUserToCache(`${userObjectId}`,uId,userDataForCache);
 
             //add user to database
+            console.log( "before omit",userDataForCache)
             omit(userDataForCache,'_id','userName','email','password','avatarColor');
-            authQueue.addAuthUserJob('addAuthUserToDatabase',{ value:userDataForCache});
+            console.log( "after omit",userDataForCache)
+
+            authQueue.addAuthUserJob('addAuthUserToDatabase',{ value:authData});
             userQueue.addUserJob('addUserToDb',{value:userDataForCache});
             const userJwt:string =SignUp.prototype.signToken(authData,userObjectId);
             req.session = {jwt:userJwt};
@@ -81,11 +84,14 @@ export class SignUp{
                 createdAt:new Date(),
             } as IAuthDocument;
         }
-        private userData(data: IAuthDocument, userObjectId: ObjectId): IUserDocument {
+        private userData(data: IAuthDocument, userObjectId: ObjectId,authObjectId:ObjectId): IUserDocument {
+          console.log("data",data)
+          console.log("userObjectId",userObjectId)
             const { _id, username, email, uId, password, avatarColor } = data;
+            console.log("_Id",_id)
             return {
               _id: userObjectId,
-              authId: _id,
+              authId: authObjectId,
               uId,
               username: Helpers.firstLetterUppercase(username),
               email,

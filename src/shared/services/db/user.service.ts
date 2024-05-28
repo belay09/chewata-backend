@@ -6,15 +6,24 @@ class UserService {
   public async addUserData(data: IUserDocument): Promise<void> {
     await UserModel.create(data);
   }
-  public async getUserByAuthId(authId: string): Promise<IUserDocument> {
-    console.log("authId",authId)
+  public async getUserById(id: string): Promise<IUserDocument> {
     const users: IUserDocument[] = await UserModel.aggregate([
-      { $match: { authId: new mongoose.Types.ObjectId(authId) } },
-      { $lookup: { from: 'Auth', localField: '_id', foreignField: '_id', as: '_id' } },
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $lookup: { from: 'Auth', localField: 'authId', foreignField: '_id', as: 'authId' } },
       { $unwind: '$authId' },
       { $project: this.aggregateProject() }
     ]);
-    console.log("users",users)
+    return users[0];
+  }
+
+  public async getUserByAuthId(authId: string): Promise<IUserDocument> {
+    // console.log("authId",authId)
+    const users: IUserDocument[] = await UserModel.aggregate([
+      { $match: { authId: new mongoose.Types.ObjectId(authId) } }   ,
+         { $lookup: { from: 'Auth', localField: 'authId', foreignField: '_id', as: 'authId' } },      { $unwind: '$authId' },
+      { $project: this.aggregateProject() }
+    ]);
+    // console.log("users",users)
     return users[0];
   }
   private aggregateProject() {

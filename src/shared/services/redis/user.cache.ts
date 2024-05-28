@@ -4,6 +4,8 @@ import { config } from "@root/config";
 import Logger from "bunyan";
 import { InternalServerError } from "@global/helpers/error-handler";
 import { Server } from "socket.io";
+import { Response } from 'express';
+import { Helpers } from "@global/helpers/helpers";
 
 const log: Logger = config.createLogger("chewata-UserCache");
 
@@ -71,6 +73,28 @@ export class UserCache extends BaseCache {
             } catch (error) {
                 log.error(error);
                 throw new InternalServerError('Error saving user to cache');
+            }
+        }
+        public async getUserFromCache(userId: string): Promise<IUserDocument> {
+            try {
+                if(!this.client.isOpen){
+                    await this.client.connect();
+                }
+                const response = await this.client.HGETALL(`users:${userId}`) as unknown as IUserDocument;                response.createdAt = new Date(Helpers.parseJson(`${response.createdAt}`));
+                response.blocked = Helpers.parseJson(`${response.blocked}`);
+                response.blockedBy = Helpers.parseJson(`${response.blockedBy}`);
+                response.notifications = Helpers.parseJson(`${response.notifications}`);
+                response.social = Helpers.parseJson(`${response.social}`);
+                response.postsCount = parseInt(`${response.postsCount}`,10);
+                response.followersCount = parseInt(`${response.followersCount}`,10);
+                response.followingCount = parseInt(`${response.followingCount}`,10);
+
+                return response;
+
+
+            } catch (error) {
+                log.error(error);
+                throw new InternalServerError('Error getting user from cache');
             }
         }
 

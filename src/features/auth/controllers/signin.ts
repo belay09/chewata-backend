@@ -18,33 +18,33 @@ export class SignIn {
         const { username, password } = req.body;
         const existingUser:IAuthDocument = await authService.getUserByUsername(username);
         if (!existingUser) {
-            throw new BadRequestError('Invalid username or password');
+            throw new BadRequestError('Invalid credentials');
         }
         const passwordMatch:boolean = await existingUser.comparePassword(password);
         if (!passwordMatch) {
-            throw new BadRequestError('Invalid username or password');
+            throw new BadRequestError('Invalid credentials');
         }
         const user:IUserDocument=await userService.getUserByAuthId(`${existingUser._id}`)
         console.log("user",user,existingUser)
-        // const userJwt:string = JWT.sign({ userId: user._id,
-        //     email: existingUser.email,
-        //     username: existingUser.username,
-        //     avatarColor: existingUser.avatarColor,
-        //     uId: existingUser.uId
+        const userJwt:string = JWT.sign({ userId: user._id,
+            email: existingUser.email,
+            username: existingUser.username,
+            avatarColor: existingUser.avatarColor,
+            uId: existingUser.uId
 
-        // }, config.JWT_TOKEN_SECRET!,);
-        // req.session = { jwt: userJwt };
-        // console.log('existingUser', existingUser);
-        // const userDocument:IUserDocument ={
-        //     ...user,
-        //     // authId: existingUser._id,
-        //     username: existingUser.username,
-        //     email: existingUser.email,
-        //     avatarColor: existingUser.avatarColor,
-        //     uId: existingUser.uId,
-        //     createdAt: existingUser.createdAt
-        // } as IUserDocument;
+        }, config.JWT_TOKEN_SECRET!,);
+        req.session = { jwt: userJwt };
+        console.log('existingUser', existingUser);
+        const userDocument:IUserDocument ={
+            ...user,
+            // authId: existingUser._id,
+            username: existingUser.username,
+            email: existingUser.email,
+            avatarColor: existingUser.avatarColor,
+            uId: existingUser.uId,
+            createdAt: existingUser.createdAt
+        } as IUserDocument;
 
-        // res.status(HTTP_STATUS.OK).json({ message: 'User successfully signed in', userJwt, user: userDocument});
+        res.status(HTTP_STATUS.OK).json({ message: 'User successfully signed in', userJwt, user: userDocument});
     }
 }

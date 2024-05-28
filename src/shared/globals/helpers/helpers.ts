@@ -21,4 +21,12 @@ export class Helpers {
     }
     return parseInt(result, 10);
   }
+  static parseJson(data: string): any {
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      return data;
+
+    }
+  }
 }
