@@ -12,7 +12,7 @@ export abstract class BaseQueue {
     queue: Queue.Queue;
     log: Logger;
   constructor(queueName: string) {
-    console.log("QueueName", queueName);
+    // console.log("QueueName", queueName);
     this.queue = new Queue(queueName, `${config.REDIS_URL}`);
     bullAdapters.push(new BullAdapter(this.queue));
     bullAdapters = [...new Set(bullAdapters)];
@@ -25,7 +25,7 @@ export abstract class BaseQueue {
     this.log = config.createLogger(`${queueName}Queue`);
 
     this.queue.on("completed", (job: Job) => {
-      job.remove();
+      // job.remove();
     });
 
     this.queue.on("global:completed", (jobId: string) => {
@@ -37,6 +37,7 @@ export abstract class BaseQueue {
     });
   }
   protected addJob(name: string, data: IBaseJobData): void {
+    // console.log("addJob", name, data);
     this.queue.add(name, data, {
       attempts: 3,
       backoff: { type: "fixed", delay: 5000 },
