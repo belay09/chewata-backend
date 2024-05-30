@@ -1,6 +1,27 @@
 {
-    "cSpell.words": [
-        "chewata",
-        "cloudinary"
-    ]
+  "i18n-ally.localesPaths": ["src/locales"],
+  "i18n-ally.keystyle": "flat",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#007acc",
+    "activityBar.activeBorder": "#012944",
+    "activityBar.background": "#012944",
+    "activityBar.foreground": "#ffffff",
+    "activityBar.inactiveForeground": "#ffffff",
+    "activityBarBadge.background": "#0769ab",
+    "activityBarBadge.foreground": "#ffffff",
+    "statusBar.background": "#012944",
+    "statusBar.debuggingBackground": "#012944",
+    "statusBar.debuggingForeground": "#ffffff",
+    "statusBar.foreground": "#ffffff",
+    "statusBarItem.hoverBackground": "#012944",
+    "titleBar.activeBackground": "#012944",
+    "titleBar.activeForeground": "#ffffff",
+    "titleBar.inactiveBackground": "#333333",
+    "titleBar.inactiveForeground": "#808080"
+  },
+  "editor.formatOnSave": true,
+  "[css]": {
+    "editor.formatOnSave": false
+  },
+  "peacock.color": "#007acc"
 }

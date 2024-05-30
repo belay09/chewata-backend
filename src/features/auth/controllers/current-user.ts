@@ -24,4 +24,3 @@ export class CurrentUser {
     }
 }
 
-export const currentUser:CurrentUser=new CurrentUser();

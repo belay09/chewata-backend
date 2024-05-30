@@ -48,7 +48,7 @@ export class chewataServer {
       cookieSeeion({
         name: "session",
         keys: [secretKey1, secretKey2],
-        maxAge: 5000,
+        maxAge: 24 * 60 * 60 * 1000,
         secure: config.NODE_ENV !== "development", //true for https
       })
     );
@@ -74,7 +74,6 @@ export class chewataServer {
   }
   private routeMiddleware(app: Application): void {
     ApplicationRoutes(app);
-   
   }
   private globalErrorHandler(app: Application): void {
     app.all("*", (req: Request, res: Response, next: NextFunction) => {
@@ -82,22 +81,26 @@ export class chewataServer {
         status: HTTP_STATUS.NOT_FOUND,
         message: "Route not found",
       });
-    }
-    );
-    app.use((error: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
-      log.error(error);
-      if(error instanceof CustomError){
-        return res.status(error.status).json(error.serializeError());
-      }
-      
     });
-
+    app.use(
+      (
+        error: IErrorResponse,
+        req: Request,
+        res: Response,
+        next: NextFunction
+      ) => {
+        log.error(error);
+        if (error instanceof CustomError) {
+          return res.status(error.status).json(error.serializeError());
+        }
+      }
+    );
   }
   private async startServer(app: Application): Promise<void> {
     try {
       const httpServer: http.Server = new http.Server(app);
       const socketIo: Server = await this.createSocketIo(httpServer);
-        this.socketIoConnection(socketIo);
+      this.socketIoConnection(socketIo);
       this.startHttpServer(httpServer);
     } catch (error) {
       log.error("Error while starting server", error);
@@ -118,9 +121,9 @@ export class chewataServer {
     return io;
   }
   private startHttpServer(httpServer: http.Server): void {
-    log.info ("server has started with process id", process.pid);
+    log.info("server has started with process id", process.pid);
     httpServer.listen(SERVER_PORT, () => {
-    log.info(`Server is running on port ${SERVER_PORT}`);
+      log.info(`Server is running on port ${SERVER_PORT}`);
     });
   }
   private socketIoConnection(io: Server): void {}

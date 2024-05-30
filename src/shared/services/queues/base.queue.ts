@@ -1,16 +1,18 @@
 import Queue, { Job } from "bull";
 import Logger from "bunyan";
+import { IEmailJob } from "@user/interface/user.interface";
+
 import { createBullBoard } from "@bull-board/api";
 import { BullAdapter } from "@bull-board/api/bullAdapter";
 import { ExpressAdapter } from "@bull-board/express";
 import { config } from "@root/config";
 import { IAuthJob } from "@auth/interfaces/auth.interface";
-type IBaseJobData = IAuthJob;
+type IBaseJobData = IAuthJob | IEmailJob;
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
 export abstract class BaseQueue {
-    queue: Queue.Queue;
-    log: Logger;
+  queue: Queue.Queue;
+  log: Logger;
   constructor(queueName: string) {
     // console.log("QueueName", queueName);
     this.queue = new Queue(queueName, `${config.REDIS_URL}`);

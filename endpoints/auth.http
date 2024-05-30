@@ -24,8 +24,8 @@ withCredentials: true
 
 {
     "username": "belay",
-    "password": "123123"
-    }
+    "password": "sira"
+}
 
 ###
 GET  {{baseUrl}}{{urlPath}}/signout
@@ -42,3 +42,24 @@ Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
+
+###
+POST {{baseUrl}}{{urlPath}}/forgot-password
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+    "email": "sirak@gmail.com"
+}
+
+###
+POST {{baseUrl}}{{urlPath}}/reset-password/c29f6cfb51d7ee6cc55ea6bb950a35e24073d06f
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+    "password": "sira",
+    "confirmPassword": "sira"
+}

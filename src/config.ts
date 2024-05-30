@@ -12,21 +12,29 @@ class Config {
   public CLOUD_NAME: string | undefined;
   public CLOUD_API_KEY: string | undefined;
   public CLOUD_API_SECRET: string | undefined;
+  public SENDGRID_API_KEY: string | undefined;
+  public SENDGRID_SENDER: string | undefined;
+  public SENDER_EMAIL: string | undefined;
+  public SENDER_EMAIL_PASSWORD: string | undefined;
+
   private readonly defaultDATABASE_URL = "mongodb://localhost:27017/chewata";
   constructor() {
     this.DATABASE_URL = process.env.DATABASE_URL || this.defaultDATABASE_URL;
-    this.JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET || '';
-    this.NODE_ENV = process.env.NODE_ENV ;
-    this.SECRETE_KEY_1 = process.env.SECRETE_KEY_1 ;
+    this.JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET || "";
+    this.NODE_ENV = process.env.NODE_ENV;
+    this.SECRETE_KEY_1 = process.env.SECRETE_KEY_1;
     this.SECRETE_KEY_2 = process.env.SECRETE_KEY_2;
     this.REDIS_URL = process.env.REDIS_URL;
     this.CLOUD_NAME = process.env.CLOUD_NAME;
     this.CLOUD_API_KEY = process.env.CLOUD_API_KEY;
     this.CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
-
+    this.SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+    this.SENDGRID_SENDER = process.env.SENDGRID_SENDER;
+    this.SENDER_EMAIL = process.env.SENDER_EMAIL;
+    this.SENDER_EMAIL_PASSWORD = process.env.SENDER_EMAIL_PASSWORD;
   }
-  public createLogger(name :string): bunyan {
-    return bunyan.createLogger({ name,level: 'debug'});
+  public createLogger(name: string): bunyan {
+    return bunyan.createLogger({ name, level: "debug" });
   }
   public validateConfig(): void {
     for (const [key, value] of Object.entries(this)) {
@@ -39,8 +47,8 @@ class Config {
     cloudinary.v2.config({
       cloud_name: this.CLOUD_NAME,
       api_key: this.CLOUD_API_KEY,
-      api_secret: this.CLOUD_API_SECRET
-    })
+      api_secret: this.CLOUD_API_SECRET,
+    });
   }
 }
 
